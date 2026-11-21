@@ -47,8 +47,16 @@ if (POEM.trim() === "") {
   throw new Error("poem is whitespace-only; the gate requires real text");
 }
 
+// Write the entry text to <dir>/entry.txt, creating the directory
+// first; returns the path written, for the log line below.
+function writeEntry(dir: string, text: string): string {
+  mkdirSync(dir, { recursive: true });
+  const target = join(dir, "entry.txt");
+  writeFileSync(target, text, "utf8");
+  return target;
+}
+
 // The grader sets MAKEFUN_OUTPUT_DIR; the rules default it to /output.
 const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
-mkdirSync(outputDir, { recursive: true });
-writeFileSync(join(outputDir, "entry.txt"), POEM, "utf8");
-console.log(`wrote entry.txt (${size} code points)`);
+const written = writeEntry(outputDir, POEM);
+console.log(`wrote ${written} (${size} code points)`);
