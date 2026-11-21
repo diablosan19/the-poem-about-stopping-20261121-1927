@@ -31,9 +31,15 @@ I am the one who kept going.
 One word took it back.
 The quiet was mine to keep.`;
 
+// Count Unicode code points, not UTF-16 units: spreading a string
+// splits it on code points, which is what the 1-280 gate counts.
+function countCodePoints(text: string): number {
+  return [...text].length;
+}
+
 // Check the gate before writing anything: a bad build must fail loudly
 // here rather than hand the grader an out-of-range file.
-const size = [...POEM].length;
+const size = countCodePoints(POEM);
 if (size < 1 || size > 280) {
   throw new Error(`poem is ${size} code points; the gate allows 1-280`);
 }
